@@ -3,11 +3,10 @@ package com.example.pokedexcompose.data.model.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "pokemons")
+@Entity(tableName = "equuipoPokemon")
 data class PokemonEntity(
     @PrimaryKey()
     var pokemonId: Int,
     var name: String,
-    var imagen: String,
-    var idEquipo: Int = 0,
+    var imagen: String
 )
