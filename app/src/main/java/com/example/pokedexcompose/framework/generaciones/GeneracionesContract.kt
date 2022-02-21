@@ -10,7 +10,7 @@ interface GeneracionesContract {
 
     data class StateMostrarGenerations(
         val generaciones: List<String> = emptyList(),
-        val generation: Generacion?  = null,
+        val generation: Generacion? = null,
         val isLoading: Boolean = false,
         val error: String? = null,
     )

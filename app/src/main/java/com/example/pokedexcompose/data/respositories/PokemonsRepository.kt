@@ -13,25 +13,25 @@ class PokemonsRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) {
 
-    suspend fun getPokemon(pokemonName: String) : Flow<NetworkResult<Pokemon>>{
+    suspend fun getPokemon(pokemonName: String): Flow<NetworkResult<Pokemon>> {
         return flow {
             emit(NetworkResult.Loading())
             emit(remoteDataSource.getPokemon(pokemonName))
         }
     }
 
-    suspend fun getNamesPokemonsByGeneration(nameGeneration: String) : Flow<NetworkResult<List<String>>> {
+    suspend fun getNamesPokemonsByGeneration(nameGeneration: String): Flow<NetworkResult<List<String>>> {
         return flow {
             emit(NetworkResult.Loading())
             emit(remoteDataSource.getNamesPokemonsByGeneration(nameGeneration))
         }
     }
 
-    suspend fun pokemonList(nameGeneration: String) : Flow<List<Pokemon>>{
+    suspend fun pokemonList(nameGeneration: String): Flow<List<Pokemon>> {
         return flow<List<Pokemon>> {
-            val listPokemon : MutableList<Pokemon> = mutableListOf();
+            val listPokemon: MutableList<Pokemon> = mutableListOf()
             val listNames = remoteDataSource.getNamesPokemonsByGeneration(nameGeneration)
-            if (listNames is NetworkResult.Succcess){
+            if (listNames is NetworkResult.Succcess) {
                 listNames.data?.forEach {
                     remoteDataSource.getPokemon(it).data?.let { pokemon -> listPokemon.add(pokemon) }
                 }

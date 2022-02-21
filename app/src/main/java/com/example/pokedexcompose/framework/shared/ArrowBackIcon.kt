@@ -7,7 +7,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 
 @Composable
-fun ArrowBackIcon(goBack: () -> Unit){
+fun ArrowBackIcon(goBack: () -> Unit) {
     IconButton(onClick = goBack) {
         Icon(
             imageVector = Icons.Default.ArrowBack,

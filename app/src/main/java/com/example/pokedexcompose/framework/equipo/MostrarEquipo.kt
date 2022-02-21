@@ -1,9 +1,7 @@
 package com.example.pokedexcompose.framework.equipo
 
-import android.icu.text.CaseMap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,7 +25,6 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.pokedexcompose.domain.Pokemon
 import com.example.pokedexcompose.framework.shared.ArrowBackIcon
-
 import com.example.pokedexcompose.ui.theme.LightBlue
 import com.example.pokedexcompose.ui.theme.TypeWater
 import com.example.pokedexcompose.utils.CargaDrawable
@@ -36,9 +33,10 @@ import com.example.pokedexcompose.utils.parseTypeToColor
 
 @Composable
 fun MostrarEquipo(
-    onBackNavigate: () -> Unit ,
-    viewModel: MostrarEquipoViewModel = hiltViewModel()){
-    LaunchedEffect(key1 = true ){
+    onBackNavigate: () -> Unit,
+    viewModel: MostrarEquipoViewModel = hiltViewModel()
+) {
+    LaunchedEffect(key1 = true) {
         viewModel.handleEvent(MostrarEquipoContract.Event.getEquipo)
     }
     val isLoading = viewModel.uiState.collectAsState().value.isLoading
@@ -48,8 +46,11 @@ fun MostrarEquipo(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {Text(text = Constantes.EQUIPO_POKEMON
-                    , color = Color.White )},
+                title = {
+                    Text(
+                        text = Constantes.EQUIPO_POKEMON, color = Color.White
+                    )
+                },
                 backgroundColor = TypeWater,
                 navigationIcon = { ArrowBackIcon(onBackNavigate) }
             )
@@ -84,7 +85,6 @@ fun MostrarEquipo(
             }
         }
     }
-
 
 
 }

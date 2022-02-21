@@ -11,13 +11,13 @@ import retrofit2.http.Path
 interface PokemonService {
 
     @GET(Constantes.PATH_GENERACIONES)
-    suspend fun getNamesPokemonsByGeneration() : Response<GeneracionesPoJo>
+    suspend fun getNamesPokemonsByGeneration(): Response<GeneracionesPoJo>
 
     @GET(Constantes.PATH_POKEMONSBYGEMERATIONS)
-    suspend fun getNamesPokemonsByGeneration(@Path(Constantes.NAME_GENERATION) nameGeneration:String) : Response<GenerationPojo>
+    suspend fun getNamesPokemonsByGeneration(@Path(Constantes.NAME_GENERATION) nameGeneration: String): Response<GenerationPojo>
 
     @GET(Constantes.PATH_GETPOKEMONS)
-    suspend fun getPokemon(@Path(Constantes.PARAMETER_POKEMONNAME) pokemonName : String) : Response<PokemonPojo>
+    suspend fun getPokemon(@Path(Constantes.PARAMETER_POKEMONNAME) pokemonName: String): Response<PokemonPojo>
 
 
 }

@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class TipoEntity(
 
     val slot: Int,
-    val nameTipo : String,
+    val nameTipo: String,
     var idPokemon: Int = 0,
     @PrimaryKey(autoGenerate = true)
     val idTipo: Int = 0,

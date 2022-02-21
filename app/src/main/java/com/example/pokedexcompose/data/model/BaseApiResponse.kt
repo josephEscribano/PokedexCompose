@@ -1,6 +1,5 @@
 package com.example.pokedexcompose.data.model
 
-import com.example.pokedexcompose.domain.Pokemon
 import com.example.pokedexcompose.utils.Constantes
 import com.example.pokedexcompose.utils.NetworkResult
 import retrofit2.Response

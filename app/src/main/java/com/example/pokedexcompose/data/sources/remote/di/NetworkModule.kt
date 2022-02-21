@@ -4,6 +4,7 @@ package com.example.pokedexcompose.data.sources.remote.di
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.pokedexcompose.data.sources.remote.apiinterface.PokemonService
+import com.example.pokedexcompose.utils.Constantes.BASE_URL
 import com.google.gson.*
 import dagger.Module
 import dagger.Provides
@@ -16,13 +17,11 @@ import java.lang.reflect.Type
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import com.example.pokedexcompose.utils.Constantes.BASE_URL
 
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
 
 
     @Singleton
@@ -59,7 +58,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
-        gson:Gson
+        gson: Gson
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)

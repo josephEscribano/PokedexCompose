@@ -5,6 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Habilidad(
-    val slot:Int,
-    val name : String
+    val slot: Int,
+    val name: String
 ) : Parcelable

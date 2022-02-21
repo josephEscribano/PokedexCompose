@@ -10,6 +10,7 @@ object Constantes {
     const val ERROR_DELETE = "Error al borrar"
     const val COMILLAS = ""
     const val EQUIPO_POKEMON = "Equipo Pokemon"
+
     //PATHS
     const val PATH_POKEMONSBYGEMERATIONS = "generation/{name}"
     const val PATH_GETPOKEMONS = "pokemon/{pokemonName}"
@@ -22,5 +23,20 @@ object Constantes {
 
     const val NAME_GENERATION = "name"
     const val PARAMETER_POKEMONNAME = "pokemonName"
+
+
+    //Navegacion
+
+    const val PANTALLA_GENERACIONES = "?generacion="
+
+    const val PANTALLA_GENERACIONES_RECIBIR = "?generacion={generacion}"
+
+    const val GENERACION = "generacion"
+
+    const val PANTALLA_LISTPOKEMON = "?pokemon="
+
+    const val PANTALLA_LISTPOKEMON_RECIBIR = "?pokemon={pokemon}"
+
+    const val POKEMON_NAVIGATION = "pokemon"
 
 }

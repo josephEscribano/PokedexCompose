@@ -9,5 +9,5 @@ data class PokemonWithTipos(
         parentColumn = "pokemonId",
         entityColumn = "idPokemon"
     )
-    val tipos : List<TipoEntity>
+    val tipos: List<TipoEntity>
 )

@@ -41,15 +41,3 @@ fun parseStatToColor(stat: Estadisitica): Color {
         else -> Color.White
     }
 }
-
-fun parseStatText(stat: Estadisitica): String {
-    return when (stat.nameStat.lowercase(Locale.ROOT)) {
-        "hp" -> "HP"
-        "attack" -> "Atk"
-        "defense" -> "Def"
-        "special-attack" -> "SpAtk"
-        "special-defense" -> "SpDef"
-        "speed" -> "Spd"
-        else -> ""
-    }
-}

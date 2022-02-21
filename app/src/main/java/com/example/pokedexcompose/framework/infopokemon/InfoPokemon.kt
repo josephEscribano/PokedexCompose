@@ -20,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,7 +45,7 @@ fun ShowInfoPokemon(
     viewModel: InfoPokemonViewModel = hiltViewModel()
 ) {
     val pokemon: Pokemon? = viewModel.pokemonState.collectAsState().value.pokemon
-    LaunchedEffect(key1 = true ){
+    LaunchedEffect(key1 = true) {
         viewModel.handleEvent(InfoPokemonContract.Event.getPokemon(pokemonName))
         pokemon?.let {
             viewModel.handleEvent(InfoPokemonContract.Event.checkPokemon(pokemon.id))
@@ -59,7 +58,7 @@ fun ShowInfoPokemon(
         SnackbarHostState()
     }
     val scope = rememberCoroutineScope()
-    val nPokemon : Int = viewModel.pokemonState.collectAsState().value.nPokemons
+    val nPokemon: Int = viewModel.pokemonState.collectAsState().value.nPokemons
     val existe: Int = viewModel.pokemonState.collectAsState().value.existe
 
     val circularProgressDrawable = CargaDrawable()
@@ -67,96 +66,116 @@ fun ShowInfoPokemon(
         Scaffold(
             snackbarHost = {
                 SnackbarHost(hostState = snackBarHostState)
-                },
-                topBar = {
-                    TopAppBar(
-                        title = { Text(text = Constantes.COMILLAS)},
-                        backgroundColor = parseTypeToColor(pokemon.types.first()),
-                        navigationIcon = { ArrowBackIcon(onBackNavigate) },
-                        actions = {
-                            if (existe == 0){
-                                IconButton(onClick = {
-                                    if (nPokemon < 6){
-                                        viewModel.handleEvent(InfoPokemonContract.Event.insertPokemon(pokemon))
-                                    }else{
-                                        scope.launch {
-                                            snackBarHostState.showSnackbar(Constantes.AVISO_EQUIPO)
-                                        }
+            },
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = Constantes.COMILLAS) },
+                    backgroundColor = parseTypeToColor(pokemon.types.first()),
+                    navigationIcon = { ArrowBackIcon(onBackNavigate) },
+                    actions = {
+                        if (existe == 0) {
+                            IconButton(onClick = {
+                                if (nPokemon < 6) {
+                                    viewModel.handleEvent(
+                                        InfoPokemonContract.Event.insertPokemon(
+                                            pokemon
+                                        )
+                                    )
+                                } else {
+                                    scope.launch {
+                                        snackBarHostState.showSnackbar(Constantes.AVISO_EQUIPO)
                                     }
-                                }) {
-                                    LaunchedEffect(key1 = true){
-                                        viewModel.handleEvent(InfoPokemonContract.Event.checkPokemon(pokemon.id))
-                                    }
-                                    if (existe == 0){
-                                        Icon(imageVector = Icons.Default.Add, contentDescription = null )
-                                    }else{
-                                        Icon(imageVector = Icons.Default.Delete, contentDescription = null )
-                                    }
-
                                 }
-                            }else{
-                                IconButton(onClick = { viewModel.handleEvent(InfoPokemonContract.Event.deletePokemon(pokemon)) }) {
-                                    LaunchedEffect(key1 = true){
-                                        viewModel.handleEvent(InfoPokemonContract.Event.checkPokemon(pokemon.id))
-                                    }
-                                    if (existe != 0){
-                                        Icon(imageVector = Icons.Default.Delete, contentDescription = null )
-                                    }else{
-                                        Icon(imageVector = Icons.Default.Add, contentDescription = null )
-                                    }
-
+                            }) {
+                                LaunchedEffect(key1 = true) {
+                                    viewModel.handleEvent(
+                                        InfoPokemonContract.Event.checkPokemon(
+                                            pokemon.id
+                                        )
+                                    )
                                 }
+                                if (existe == 0) {
+                                    Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                                } else {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = null
+                                    )
+                                }
+
                             }
+                        } else {
+                            IconButton(onClick = {
+                                viewModel.handleEvent(
+                                    InfoPokemonContract.Event.deletePokemon(
+                                        pokemon
+                                    )
+                                )
+                            }) {
+                                LaunchedEffect(key1 = true) {
+                                    viewModel.handleEvent(
+                                        InfoPokemonContract.Event.checkPokemon(
+                                            pokemon.id
+                                        )
+                                    )
+                                }
+                                if (existe != 0) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = null
+                                    )
+                                } else {
+                                    Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                                }
 
+                            }
                         }
-                    )
-                }
-                ){
-                Column(
-                    horizontalAlignment = CenterHorizontally,
+
+                    }
+                )
+            }
+        ) {
+            Column(
+                horizontalAlignment = CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(parseTypeToColor(pokemon.types.first()))
+            ) {
+                Card(
                     modifier = Modifier
+                        .fillMaxSize()
                         .fillMaxWidth()
-                        .background(parseTypeToColor(pokemon.types.first()))
+                        .padding(20.dp)
+                        .shadow(10.dp, RoundedCornerShape(10.dp))
+                        .align(CenterHorizontally)
                 ) {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .fillMaxWidth()
-                            .padding(20.dp)
-                            .shadow(10.dp, RoundedCornerShape(10.dp))
-                            .align(CenterHorizontally)
+
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.padding(5.dp)
                     ) {
+                        ImagenAndName(pokemon, circularProgressDrawable)
+                        TiposInfo(pokemon)
+                        Spacer(
+                            modifier = Modifier
+                                .size(10.dp)
+                        )
+                        MostrarHabilidades(pokemon)
 
-                        Column(
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier.padding(5.dp)
-                        ) {
-                            ImagenAndName(pokemon, circularProgressDrawable)
-                            TiposInfo(pokemon)
-                            Spacer(
-                                modifier = Modifier
-                                    .size(10.dp)
-                            )
-                            MostrarHabilidades(pokemon)
+                        Spacer(modifier = Modifier.size(10.dp))
 
-                            Spacer(modifier = Modifier.size(10.dp))
-
-                            ListStats(pokemon)
-                        }
-
+                        ListStats(pokemon)
                     }
 
                 }
 
             }
+
+        }
     }
 
 
-        
-        
-    }
-
-
+}
 
 
 @Composable

@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Estadisitica(
     val nameStat: String,
-    val valueStat : Int
-) :Parcelable
+    val valueStat: Int
+) : Parcelable
