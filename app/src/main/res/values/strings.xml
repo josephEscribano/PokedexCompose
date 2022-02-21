@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PokedexCompose</string>
+    <string name="db">pokemon_database</string>
 </resources>
