@@ -1,13 +1,12 @@
 package com.example.pokedexcompose.framework.navegacion
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavArgumentBuilder
-import androidx.navigation.NavType
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.pokedexcompose.domain.Pokemon
+import com.example.pokedexcompose.framework.equipo.MostrarEquipo
 import com.example.pokedexcompose.framework.generaciones.MostrarGeneraciones
 import com.example.pokedexcompose.framework.infopokemon.ShowInfoPokemon
 import com.example.pokedexcompose.framework.listapokemons.ListPokemons
@@ -24,7 +23,8 @@ fun Navegation(){
         composable(
             route = Routes.GENERACIONES
         ){
-            MostrarGeneraciones(onNavigate = {
+            MostrarGeneraciones(
+                onNavigate = {
                 navController.navigate(Routes.LISTPOKEMON + "?generacion=${it}")
             })
         }
@@ -41,7 +41,9 @@ fun Navegation(){
               onBackNavigate = {navController.popBackStack()}
               , onNavigate = { pokemonName ->
                   navController.navigate(Routes.POKEMON_DETALLES + "?pokemon=${pokemonName}")
-              })
+              },
+              onNavigateEquipo = {navController.navigate(Routes.EQUIPO_SCREEN)}
+          )
         }
 
         composable(
@@ -51,8 +53,18 @@ fun Navegation(){
                     type = NavType.StringType
                 }
         )){
-            ShowInfoPokemon(pokemonName = it.arguments?.get("pokemon") as String,
-            onBackNavigate = {navController.popBackStack()})
+            ShowInfoPokemon(
+                pokemonName = it.arguments?.get("pokemon") as String,
+                onBackNavigate = {navController.popBackStack()}
+            )
         }
+
+        composable(
+            route = Routes.EQUIPO_SCREEN
+        ){
+            MostrarEquipo(onBackNavigate = {navController.popBackStack()})
+        }
+
+
     }
 }

@@ -7,13 +7,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -33,10 +31,11 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.pokedexcompose.domain.Pokemon
 import com.example.pokedexcompose.framework.shared.ArrowBackIcon
-import com.example.pokedexcompose.ui.theme.TypeWater
+import com.example.pokedexcompose.utils.CargaDrawable
 import com.example.pokedexcompose.utils.Constantes
 import com.example.pokedexcompose.utils.parseStatToColor
 import com.example.pokedexcompose.utils.parseTypeToColor
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -46,71 +45,119 @@ fun ShowInfoPokemon(
     onBackNavigate: () -> Unit,
     viewModel: InfoPokemonViewModel = hiltViewModel()
 ) {
-
-    viewModel.handleEvent(InfoPokemonContract.Event.getPokemon(pokemonName))
     val pokemon: Pokemon? = viewModel.pokemonState.collectAsState().value.pokemon
+    LaunchedEffect(key1 = true ){
+        viewModel.handleEvent(InfoPokemonContract.Event.getPokemon(pokemonName))
+        pokemon?.let {
+            viewModel.handleEvent(InfoPokemonContract.Event.checkPokemon(pokemon.id))
+        }
 
-    val context = LocalContext.current
-    val circularProgressDrawable: CircularProgressDrawable = remember {
-        val c = CircularProgressDrawable(context)
-        c.strokeWidth = 5f
-        c.centerRadius = 30f
-        c.start()
-        c
+        viewModel.handleEvent(InfoPokemonContract.Event.checkSizeList)
+
     }
+    val snackBarHostState = remember {
+        SnackbarHostState()
+    }
+    val scope = rememberCoroutineScope()
+    val nPokemon : Int = viewModel.pokemonState.collectAsState().value.nPokemons
+    val existe: Int = viewModel.pokemonState.collectAsState().value.existe
+
+    val circularProgressDrawable = CargaDrawable()
     pokemon?.let {
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = "")},
-                    backgroundColor = parseTypeToColor(pokemon.types.first()),
-                    navigationIcon = { ArrowBackIcon(onBackNavigate) }
-                )
-            }
-        ){
-            Column(
-                horizontalAlignment = CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(parseTypeToColor(pokemon.types.first()))
-            ) {
-                Card(
+            snackbarHost = {
+                SnackbarHost(hostState = snackBarHostState)
+                },
+                topBar = {
+                    TopAppBar(
+                        title = { Text(text = Constantes.COMILLAS)},
+                        backgroundColor = parseTypeToColor(pokemon.types.first()),
+                        navigationIcon = { ArrowBackIcon(onBackNavigate) },
+                        actions = {
+                            if (existe == 0){
+                                IconButton(onClick = {
+                                    if (nPokemon < 6){
+                                        viewModel.handleEvent(InfoPokemonContract.Event.insertPokemon(pokemon))
+                                    }else{
+                                        scope.launch {
+                                            snackBarHostState.showSnackbar(Constantes.AVISO_EQUIPO)
+                                        }
+                                    }
+                                }) {
+                                    LaunchedEffect(key1 = true){
+                                        viewModel.handleEvent(InfoPokemonContract.Event.checkPokemon(pokemon.id))
+                                    }
+                                    if (existe == 0){
+                                        Icon(imageVector = Icons.Default.Add, contentDescription = null )
+                                    }else{
+                                        Icon(imageVector = Icons.Default.Delete, contentDescription = null )
+                                    }
+
+                                }
+                            }else{
+                                IconButton(onClick = { viewModel.handleEvent(InfoPokemonContract.Event.deletePokemon(pokemon)) }) {
+                                    LaunchedEffect(key1 = true){
+                                        viewModel.handleEvent(InfoPokemonContract.Event.checkPokemon(pokemon.id))
+                                    }
+                                    if (existe != 0){
+                                        Icon(imageVector = Icons.Default.Delete, contentDescription = null )
+                                    }else{
+                                        Icon(imageVector = Icons.Default.Add, contentDescription = null )
+                                    }
+
+                                }
+                            }
+
+                        }
+                    )
+                }
+                ){
+                Column(
+                    horizontalAlignment = CenterHorizontally,
                     modifier = Modifier
-                        .fillMaxSize()
                         .fillMaxWidth()
-                        .padding(20.dp)
-                        .shadow(10.dp, RoundedCornerShape(10.dp))
-                        .align(CenterHorizontally)
+                        .background(parseTypeToColor(pokemon.types.first()))
                 ) {
-
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(5.dp)
+                    Card(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .fillMaxWidth()
+                            .padding(20.dp)
+                            .shadow(10.dp, RoundedCornerShape(10.dp))
+                            .align(CenterHorizontally)
                     ) {
-                        ImagenAndName(pokemon, circularProgressDrawable)
-                        TiposInfo(pokemon)
-                        Spacer(
-                            modifier = Modifier
-                                .size(10.dp)
-                        )
-                        MostrarHabilidades(pokemon)
 
-                        Spacer(
-                            modifier = Modifier
-                                .size(10.dp)
-                        )
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            modifier = Modifier.padding(5.dp)
+                        ) {
+                            ImagenAndName(pokemon, circularProgressDrawable)
+                            TiposInfo(pokemon)
+                            Spacer(
+                                modifier = Modifier
+                                    .size(10.dp)
+                            )
+                            MostrarHabilidades(pokemon)
 
-                        ListStats(pokemon)
+                            Spacer(modifier = Modifier.size(10.dp))
+
+                            ListStats(pokemon)
+                        }
+
                     }
 
                 }
+
             }
-        }
+    }
+
+
+        
+        
     }
 
 
 
-}
 
 @Composable
 private fun ListStats(pokemon: Pokemon) {

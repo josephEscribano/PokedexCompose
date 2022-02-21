@@ -23,8 +23,6 @@ class GeneracionesViewModel @Inject constructor(private val generationRepository
 
     val generationState : StateFlow<StateMostrarGenerations> = _generationState
 
-    private val _generacion = Channel<Generacion>()
-    val generacion = _generacion.receiveAsFlow()
 
     private val _error = Channel<String>()
     val error = _error.receiveAsFlow()

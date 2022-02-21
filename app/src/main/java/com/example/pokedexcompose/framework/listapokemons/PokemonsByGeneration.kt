@@ -10,6 +10,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,6 +37,7 @@ import com.example.pokedexcompose.framework.shared.ArrowBackIcon
 import com.example.pokedexcompose.ui.theme.LightBlue
 import com.example.pokedexcompose.ui.theme.TypeElectric
 import com.example.pokedexcompose.ui.theme.TypeWater
+import com.example.pokedexcompose.utils.CargaDrawable
 import com.example.pokedexcompose.utils.Constantes
 import com.example.pokedexcompose.utils.parseTypeToColor
 
@@ -42,6 +46,7 @@ import com.example.pokedexcompose.utils.parseTypeToColor
 @Composable
 fun ListPokemons(
     onNavigate: (String) -> Unit,
+    onNavigateEquipo: () -> Unit,
     generationName: String,
     onBackNavigate : () -> Unit,
     viewModel: PokemonsViewModel = hiltViewModel()
@@ -50,22 +55,23 @@ fun ListPokemons(
         viewModel.handleEvent(PokemonsContract.Event.getPokemonList(generationName))
     }
     val isLoading = viewModel.pokemonState.value.isLoading
+
     val listPokemon = viewModel.pokemonState.collectAsState().value.pokemonList
-    val context = LocalContext.current
-    val circularProgressDrawable: CircularProgressDrawable = remember {
-        val c = CircularProgressDrawable(context)
-        c.strokeWidth = 5f
-        c.centerRadius = 30f
-        c.start()
-        c
-    }
+
+
+    val circularProgressDrawable: CircularProgressDrawable = CargaDrawable()
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {Text(text = Constantes.POKEMON
                     , color = Color.White )},
                 backgroundColor = TypeWater,
-                navigationIcon = {ArrowBackIcon(onBackNavigate)}
+                navigationIcon = {ArrowBackIcon(onBackNavigate)},
+                actions = {
+                    IconButton(onClick = { onNavigateEquipo()}) {
+                        Icon(imageVector = Icons.Default.Info, contentDescription = null )
+                    }
+                }
             )
         }
     ) {
