@@ -5,9 +5,9 @@ import com.example.pokedexcompose.domain.Pokemon
 
 
 fun Pokemon.toPokemonEntity() : PokemonEntity {
-    return PokemonEntity(id, name, imagen, types, estadisiticas, hablidades)
+    return PokemonEntity(id, name, imagen)
 }
 
 fun PokemonEntity.toPokemon() : Pokemon {
-    return Pokemon(pokemonId, name,types, imagen, estadisiticas, hablidades)
+    return Pokemon(pokemonId, name, emptyList(), imagen, emptyList(), emptyList())
 }
